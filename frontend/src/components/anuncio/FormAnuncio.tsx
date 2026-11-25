@@ -103,11 +103,26 @@ export function FormAnuncio({
   function validar(): DadosAnuncioForm | null {
     const erros: Record<string, string> = {}
 
-    if (!titulo.trim()) erros.titulo = 'Informe o título do anúncio.'
-    if (!descricao.trim()) erros.descricao = 'Informe a descrição do item.'
+    if (!titulo.trim()) {
+      erros.titulo = 'Informe o título do anúncio.'
+    } else if (titulo.trim().length > 100) {
+      erros.titulo = 'O título deve ter no máximo 100 caracteres.'
+    }
+
+    if (!descricao.trim()) {
+      erros.descricao = 'Informe a descrição do item.'
+    } else if (descricao.trim().length > 2000) {
+      erros.descricao = 'A descrição deve ter no máximo 2000 caracteres.'
+    }
+
     if (!categoriaId) erros.categoriaId = 'Selecione uma categoria.'
     if (!estadoConservacao) erros.estadoConservacao = 'Selecione o estado de conservação.'
-    if (!localEntrega.trim()) erros.localEntrega = 'Informe o local de entrega (ex.: Bloco A, Cantina).'
+
+    if (!localEntrega.trim()) {
+      erros.localEntrega = 'Informe o local de entrega (ex.: Bloco A, Cantina).'
+    } else if (localEntrega.trim().length > 200) {
+      erros.localEntrega = 'O local de entrega deve ter no máximo 200 caracteres.'
+    }
 
     let precoFormatado: string | undefined
     if (modalidade === 'venda') {
@@ -181,7 +196,7 @@ export function FormAnuncio({
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
           erro={errosMesclados.titulo}
-          maxLength={120}
+          maxLength={100}
           required
         />
 
@@ -195,6 +210,7 @@ export function FormAnuncio({
             placeholder="Descreva detalhes, tempo de uso, acessórios inclusos, etc."
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
+            maxLength={2000}
             aria-invalid={!!errosMesclados.descricao}
           />
           {errosMesclados.descricao && (
@@ -260,6 +276,7 @@ export function FormAnuncio({
           value={localEntrega}
           onChange={(e) => setLocalEntrega(e.target.value)}
           erro={errosMesclados.localEntrega}
+          maxLength={200}
           required
         />
 
